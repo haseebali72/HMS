@@ -1,0 +1,30 @@
+.dashboardContainer {
+   height: 100vh;
+   display: grid;
+   grid-template-columns: 15% 1fr;
+   grid-template-rows: 8% 1fr;
+   /* I can also use grid-template-area property */
+   grid-template-areas: 
+    "side navbar"
+    "side main" ;
+}
+
+.navbarDiv{
+    background-color: grey;
+    grid-area: navbar;
+}
+
+.sidebarDiv{
+    background-color: #1c1f23;
+    grid-area: side
+}
+
+.hiddenSidebarDiv{
+    
+}
+
+.mainDiv{
+    grid-area: main;
+    height: fit-content ;
+    background-color: #0f13;
+}
