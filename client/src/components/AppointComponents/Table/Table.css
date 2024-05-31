@@ -1,6 +1,6 @@
 /* Table.css */
 
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
@@ -76,4 +76,9 @@ button:hover {
     font-weight: bold;
     text-align: left;
   }
+} */
+
+
+table, th, td{
+  padding: .7em;
 }

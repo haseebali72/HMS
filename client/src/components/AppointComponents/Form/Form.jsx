@@ -9,6 +9,8 @@ import { useReactToPrint } from "react-to-print"
 import PrintSlip from '../../AppointmentPrintSlip/PrintSlip'
 
 const Form = () => {
+    const [loading, setLoading] = useState(false)
+     
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current
@@ -18,22 +20,31 @@ const Form = () => {
     const { register, handleSubmit, formState, control } = form
     const { errors } = formState
 
+
     const onSubmit = data => {
         // console.log(data, typeof data)
         dispatch(addData(data))
-        alert("Data submitted")
         handlePrint();
     }
 
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className='formContainer'>
+                <div className='labelsdivOne'>
+                    <label htmlFor='category'>Category: </label>
+                    <label htmlFor='name'>Name:</label>
+                    <label htmlFor='mobile'>Mobile:</label>
+                    <label htmlFor='gender'>Gender:</label>
+                    <label htmlFor='marital_status'>Marital Status:</label>
+                    <label htmlFor='address'>Address:</label>
+                    <label htmlFor='blood_group'>Blood Group:</label>
+                    <label htmlFor='dob'>Date of Birth:</label>
+                    <label htmlFor='email'>Email:</label>
+                </div>
 
-                {/* Patients Information */}
-                <div className='personalInfo'>
+                <div className='fieldsdivOne'>
                     {/* Category */}
-                    <div className='formControl'>
-                        <label htmlFor='category' className='fieldLabels'>Category:</label>
+                    <div>
                         <select
                             id="category"
                             className='fields'
@@ -54,10 +65,8 @@ const Form = () => {
                         </p>
                     </div>
 
-
-                    {/* Patient's Name */}
-                    <div className="formControl">
-                        <label htmlFor="name" className="fieldLabels">Patient's Name:</label>
+                    {/* Name */}
+                    <div>
                         <input
                             type="text"
                             className="fields"
@@ -75,13 +84,12 @@ const Form = () => {
                     </div>
 
                     {/* Phone Number */}
-                    <div className="formControl">
-                        <label htmlFor="mobile" className="fieldLabels">Mobile Number:</label>
+                    <div>
                         <input
                             type="text"
                             id='mobile'
                             className="fields"
-                            {...register("mobileNumber", {
+                            {...register("mobile_number", {
                                 required: {
                                     value: true,
                                     message: "Patient's Name Required"
@@ -93,149 +101,13 @@ const Form = () => {
                                 }
                             })}
                         />
-                        <p className={`${errors.mobileNumber?.message ? "error" : "hidden"}`}>
-                            {errors.mobileNumber?.message}
-                        </p>
-
-                    </div>
-
-                    {/* MARITAL STATUS */}
-
-                    <div className='formControl'>
-                        <label htmlFor='maritalStatus' className='fieldLabels'>Marital Status:</label>
-                        <select
-                            id="marStatus"
-                            name='marStatus'
-                            className='fields'
-                            {...register("maritalStatus", {
-                                required: {
-                                    value: true,
-                                    message: "Marital Status Required"
-                                },
-                                validate: (value) => value !== "NA" || "Required"
-                            })}
-                        >
-                            <option value="NA" defaultValue="NA">NA</option>
-                            <option value="single">Single</option>
-                            <option value="married">Married</option>
-                            <option value="widowed">Widowed</option>
-                            <option value="divorced">Divorced</option>
-                        </select>
-                        <p className={`${errors.category?.message ? "error" : "hidden"}`}>
-                            {errors.category?.message}
+                        <p className={`${errors.mobile_number?.message ? "error" : "hidden"}`}>
+                            {errors.mobile_number?.message}
                         </p>
                     </div>
 
-                    {/*Email  */}
-                    <div className="formControl">
-                        <label htmlFor="email" className="fieldLabels">Email :</label>
-                        <input
-                            type="email"
-                            className="fields"
-                            {...register("email", {
-                                required: {
-                                    value: true,
-                                    message: "Email required"
-                                },
-                                pattern: {
-                                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-                                    message: "Invalid Email"
-                                },
-                            })}
-                        />
-                        <p className={`${errors.email?.message ? "error" : "hidden"}`}>
-                            {errors.email?.message}
-                        </p>
-                    </div>
-
-                    {/* Date of Birth */}
-                    <div className="formControl">
-                        <label htmlFor="dob" className="fieldLabels">DOB :</label>
-                        <input
-                            type="date"
-                            className="fields"
-                            id='dob'
-                            {...register("dateOfBirth", {
-                                // valueAsDate : true, the issue of serializaable data on redux
-                                required: {
-                                    value: true,
-                                    message: "Date of Birth Required"
-                                },
-                                validate: value => value !== "" || "DOB required"
-
-                            })}
-                        />
-                        <p className={`${errors.dateOfBirth?.message ? "error" : "hidden"}`}>
-                            {errors.dateOfBirth?.message}
-                        </p>
-                    </div>
-
-                    {/* Age */}
-
-                    <div className="formControl">
-                        <label htmlFor="age" className="fieldLabels">Age:</label>
-                        <input
-                            type="number"
-                            className="fields"
-                            defaultValue={23}
-                            id='age'
-                            {...register("age", {
-                                valueAsNumber: true
-                            })}
-                            readOnly
-                        />
-                        <p className={`${errors.dateOfBirth?.message ? "error" : "hidden"}`}>
-                            {errors.dateOfBirth?.message}
-                        </p>
-                    </div>
-
-
-                    {/* CNIC */}
-                    <div className="formControl">
-                        <label htmlFor="cnic" className="fieldLabels">CNIC Number :</label>
-                        <input
-                            type="text"
-                            className="fields"
-                            id='cnic'
-                            {...register("CNIC", {
-                                required: {
-                                    value: true,
-                                    message: "CNIC Number Required"
-                                },
-                                pattern: {
-                                    value: /^\d{13}$/g,
-                                    message: "Invalid CNIC Number"
-                                }
-                            })}
-                        />
-                        <p className={`${errors.CNIC?.message ? "error" : "hidden"}`}>
-                            {errors.CNIC?.message}
-                        </p>                </div>
-
-                    {/* Address */}
-
-                    <div className="formControl">
-                        <label htmlFor="address" className="fieldLabels">Address :</label>
-                        <input
-                            type="text"
-                            id='address'
-                            className="fields"
-                            {...register("address", {
-                                required: {
-                                    value: true,
-                                    message: "Address Required"
-                                }
-                            })}
-                        />
-                        <p className={`${errors.address?.message ? "error" : "hidden"}`}>
-                            {errors.address?.message}
-                        </p>
-                    </div>
-
-
-                    {/* Gender  */}
-                    <div className='formControl'>
-                        <label htmlFor='gender' className='fieldLabels'>Gender :</label>
+                    {/* Gender */}
+                    <div>
                         <select
                             id="gender"
                             name="gender"
@@ -258,15 +130,57 @@ const Form = () => {
                         </p>
                     </div>
 
-
-                    {/* Blood group */}
-                    <div className='formControl'>
-                        <label htmlFor='bldgrp' className='fieldLabels'>Blood Group :</label>
+                    {/* Marital Status  */}
+                    <div>
                         <select
-                            id="bldgrp"
-                            name="bloodGroup"
+                            id="marital_status"
+                            name='marital_status'
                             className='fields'
-                            {...register("bloodGroup", {
+                            {...register("marital_status", {
+                                required: {
+                                    value: true,
+                                    message: "Marital Status Required"
+                                },
+                                validate: (value) => value !== "NA" || "Required"
+                            })}
+                        >
+                            <option value="NA" defaultValue="NA">NA</option>
+                            <option value="single">Single</option>
+                            <option value="married">Married</option>
+                            <option value="widowed">Widowed</option>
+                            <option value="divorced">Divorced</option>
+                        </select>
+                        <p className={`${errors.marital_status?.message ? "error" : "hidden"}`}>
+                            {errors.marital_status?.message}
+                        </p>
+
+                    </div>
+
+                    {/* Address */}
+                    <div>
+                        <input
+                            type="text"
+                            id='address'
+                            className="fields"
+                            {...register("address", {
+                                required: {
+                                    value: true,
+                                    message: "Address Required"
+                                }
+                            })}
+                        />
+                        <p className={`${errors.address?.message ? "error" : "hidden"}`}>
+                            {errors.address?.message}
+                        </p>
+                    </div>
+
+                    {/* Blood Group */}
+                    <div>
+                        <select
+                            id="blood_group"
+                            name="blood_group"
+                            className='fields'
+                            {...register("blood_group", {
                                 required: {
                                     value: true,
                                     message: "Blood Group Required"
@@ -279,16 +193,100 @@ const Form = () => {
                             <option value="A-">A-</option>
                             <option value="B+">B+</option>
                         </select>
-                        <p className={`${errors.bloodGroup?.message ? "error" : "hidden"}`}>
-                            {errors.bloodGroup?.message}
+                        <p className={`${errors.blood_group?.message ? "error" : "hidden"}`}>
+                            {errors.blood_group?.message}
                         </p>
                     </div>
+
+                    {/* Date of Birth */}
+                    <div>
+                        <input
+                            type="date"
+                            className="fields"
+                            id='dob'
+                            {...register("date_of_birth", {
+                                // valueAsDate : true, the issue of serializaable data on redux
+                                required: {
+                                    value: true,
+                                    message: "Date of Birth Required"
+                                },
+                                validate: value => value !== "" || "DOB required"
+
+                            })}
+                        />
+                        <p className={`${errors.date_of_birth?.message ? "error" : "hidden"}`}>
+                            {errors.date_of_birth?.message}
+                        </p>
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                        <input
+                            id='email'
+                            type="email"
+                            className="fields"
+                            {...register("email", {
+                                required: {
+                                    value: true,
+                                    message: "Email required"
+                                },
+                                pattern: {
+                                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                                    message: "Invalid Email"
+                                },
+                            })}
+                        />
+                        <p className={`${errors.email?.message ? "error" : "hidden"}`}>
+                            {errors.email?.message}
+                        </p>
+                    </div>
+
+
                 </div>
 
-                <div className='otherInfo'>
+                <div className='labelsdivTwo'>
+                    <label htmlFor=''>Date and Time: </label>
+                    <label htmlFor='user'>Made By:</label>
+                    <label htmlFor=''>Reffered To : </label>
+                    <label htmlFor='depart'>Department:</label>
+                    <label htmlFor='doctor'>Doctor:</label>
+                    <label htmlFor='City'>City:</label>
+                    <label htmlFor='panel'>Panel: </label>
+                    <label htmlFor='payment'>Payment:</label>
+                </div>
+
+                <div className='fieldsdivTwo'>
+
+                    {/* Date and Time */}
+                    <div>
+                        <input className='fields' />
+                    </div>
+
+                    {/* Made By */}
+                    <div>
+                        <input
+                            id='user'
+                            type="text"
+                            className="fields"
+                            {...register("", {
+                                required: {
+                                    value: true,
+                                    message: "Email required"
+                                },
+                                pattern: {
+                                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+                                    message: "Invalid Email"
+                                },
+                            })}
+                        />
+                        <p className={`${errors.email?.message ? "error" : "hidden"}`}>
+                            {errors.email?.message}
+                        </p>
+                    </div>
+
                     {/* Reffered to */}
-                    <div className='formControl'>
-                        <label htmlFor='refferedTo' className='fieldLabels'>Reffered To:</label>
+
+                    <div>
                         <select
                             id="reffer"
                             className='fields'
@@ -310,8 +308,8 @@ const Form = () => {
                     </div>
 
                     {/* Department */}
-                    <div className='formControl'>
-                        <label htmlFor='department' className='fieldLabels'>Department:</label>
+
+                    <div>
                         <select
                             id="department"
                             name='department'
@@ -333,10 +331,9 @@ const Form = () => {
                         </p>
                     </div>
 
+                    {/* Doctor */}
 
-                    {/* Doctor*/}
-                    <div className='formControl'>
-                        <label htmlFor='doctor' className='fieldLabels'>Doctor</label>
+                    <div>
                         <select
                             id="doctor"
                             name='doctor'
@@ -351,35 +348,89 @@ const Form = () => {
                         >
                             {opdDoctors.map(doc => <option key={doc.key} value={doc.value}>{doc.name}</option>)}
                         </select>
-                        <p className={`${errors.reffer?.message ? "error" : "hidden"}`}>
-                            {errors.reffer?.message}
+                        <p className={`${errors.doctor?.message ? "error" : "hidden"}`}>
+                            {errors.doctor?.message}
                         </p>
                     </div>
 
-                    {/* Payment*/}
-                    <div className='formControl'>
-                        <label htmlFor='payment' className='fieldLabels'>Payment :</label>
+                    {/* City */}
+                    <div>
                         <select
-                            id="payment"
-                            name="payment"
+                            id="city"
+                            name='city'
+                            className='fields'
+                            {...register("city", {
+                                required: {
+                                    value: true,
+                                    message: "Patient's Category Required"
+                                },
+                                validate: (value) => value !== "NA" || "Department Required"
+                            })}
+                        >
+                            <option value="NA" defaultValue="NA">NA</option>
+                            <option value="Karachi">Karachi</option>
+                            <option value="Lahore">Lahore</option>
+                            <option value="Peshawar">Peshawar</option>
+                            <option value="Quetta">Quetta</option>
+
+                        </select>
+                        <p className={`${errors.city?.message ? "error" : "hidden"}`}>
+                            {errors.city?.message}
+                        </p>
+                    </div>
+
+                    {/*  Panel */}
+                    <div>
+                        <select
+                            id="panel"
+                            name='panel'
+                            className='fields'
+                            {...register("panel", {
+                                required: {
+                                    value: true,
+                                    message: "Patient's Category Required"
+                                },
+                                validate: (value) => value !== "NA" || "Department Required"
+                            })}
+                        >
+                            <option value="NA" defaultValue="NA">NA</option>
+                            <option value="PIA">PIA</option>
+                            <option value="Jubliee Life">Jubliee Life</option>
+                            <option value="Adam jee Insurance">Adam jee Insurance</option>
+                            <option value="Railways">Railways</option>
+
+                        </select>
+                        <p className={`${errors.panel?.message ? "error" : "hidden"}`}>
+                            {errors.panel?.message}
+                        </p>
+                    </div>
+
+                    {/* Payment */}
+                    <div>
+                        <select
+                            id="payemnt"
+                            name='payment'
                             className='fields'
                             {...register("payment", {
                                 required: {
                                     value: true,
-                                    message: "Payment Method"
+                                    message: "Patient's Category Required"
                                 },
-                                validate: value => value != "NA" || "Payment Required"
+                                validate: (value) => value !== "NA" || "Department Required"
                             })}
                         >
                             <option value="NA" defaultValue="NA">NA</option>
-                            <option value="Cash">Cash</option>
                             <option value="Online">Online</option>
+                            <option value="Cash">Cash</option>
                         </select>
                         <p className={`${errors.payment?.message ? "error" : "hidden"}`}>
                             {errors.payment?.message}
                         </p>
-                        <input type='submit' className='submitButton' />
+                    </div>
 
+                    {/*Submit  */}
+                    <div className='submitButton'>
+                        <input type='submit'></input>
                     </div>
                 </div>
             </form>

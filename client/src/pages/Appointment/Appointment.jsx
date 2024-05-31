@@ -8,25 +8,15 @@ const Appointment = () => {
   return (
     <>
       <div className='wrapper'>
-       
         <div className='upperDiv'>
+          <div className='formDiv'>
             <Form />
+          </div>
         </div>
         <div className='lowerDiv'>
-         
-          <div className='buttonDiv'>
-            <button className='queueButton'>Copy</button>
-            <button className='queueButton'>CSV</button>
-            <button className='queueButton'>PDF</button>
-            <button className='queueButton'>PDF</button>
-            <label htmlFor='searchQueue'>Search:</label>
-            <input id='searchQueue' type='search' placeholder='Search Queue' />
-          </div>
-         
           <div className='tableDiv'>
             <Table />
           </div>
-        
         </div>
       </div>
     </>

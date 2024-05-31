@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import "./Table.css"
 import { tableInfo } from '../../../data/appointmentTable'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faCircleXmark, faPrint } from '@fortawesome/free-solid-svg-icons'
 
 const Table = () => {
-    const [issueRefund, setIssueRefund] = useState(false)
-
     const onRefundIssue = ()=>{
         alert("refund issued")
     }
@@ -35,8 +35,8 @@ const Table = () => {
                     {tableInfo.map((info) => (
                         <tr key={info.s_number}>
                             <td>{info.s_number}</td>
-                            <td>{info.queueNo}<button onClick={onRefundIssue}>cancle</button></td>
-                            <td>{info.opdId}<button onClick={appointmentSlipGenerator}>print</button></td>
+                            <td>{info.queueNo}<button onClick={onRefundIssue}><FontAwesomeIcon icon={faCircleXmark}/></button></td>
+                            <td>{info.opdId}<button onClick={appointmentSlipGenerator}><FontAwesomeIcon icon={faPrint}/></button></td>
                             <td>{info.UHID}</td>
                             <td>{info.patient_name}</td>
                             <td>{info.Department}</td>

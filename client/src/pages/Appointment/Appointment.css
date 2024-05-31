@@ -1,7 +1,6 @@
 .wrapper{
-  background-color: red;
   height: 100%;
-  margin: 10px;
+  margin: .3%;
   display: grid;
   grid-template-areas: 
   "upper upper upper"
@@ -12,46 +11,31 @@
 
 .upperDiv{
   grid-area: upper;
-  background-color: #f1f1f2;
+  margin: 2px;
+  border-radius: .8rem;
 }
 
-.searchDiv{
-  background-color: #017f80;
-}
-
-.searchDiv input{
-  width: 4em;
-  border: 1px solid black;
-  margin: 0.5%;
-}
 
 .formDiv{
-
+    margin: 2px;
+    border-radius: .8rem;
+    background-color: #fff5;
+    backdrop-filter: blur(7px);
 }
 
+
+/*  Lower Div*/
 .lowerDiv{
   grid-area: lower;
+  margin: 1%;
 }
 
-.lowerDiv input{
-  padding: 0.75rem;
-  align-items: center;
-  height: 1.75rem;
-  border: none
+.tableDiv{
+  width: 90vw;
+  height: auto;
+  background-color: #fff5;
+  backdrop-filter: blur(7px);
+  border-radius: .8rem;
+  width: 99%;
+  margin: auto;
 }
-
-.lowerDiv input:focus{
-  outline: none;
-}
-
-.buttonDiv{
-  height: 40px;
-  background-color: pink;
-}
-
-.lowerDiv button{
-  background-color: red;
-}
-
-
-
