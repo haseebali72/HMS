@@ -13,7 +13,7 @@ const PrintSlip = forwardRef((props, ref) => {
 
         <div className='header'>
           <div className='headerOne'>
-            <h1>Date : 12/8/2024</h1>
+            <h1>Date : {data?.date}</h1>
           </div>
           <div className='headerTwo'>
             <img src={Logo} style={{ width: "100px", height: "100px" }}></img>
@@ -21,7 +21,7 @@ const PrintSlip = forwardRef((props, ref) => {
             <h1>Appointment Slip</h1>
           </div>
           <div className='headerThree'>
-            <h1>Time : 02:00:00 PM</h1>
+            <h1>Time : {data?.time}</h1>
           </div>
         </div>
 

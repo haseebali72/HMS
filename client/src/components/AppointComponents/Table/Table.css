@@ -1,84 +1,74 @@
-/* Table.css */
-
-/* table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-th, td {
-  padding: 12px ;
-  border: 1px solid #ddd;
-}
-
-thead tr {
-  background-color: #f2f2f2;
-  color: #333;
-  text-align: left;
-  font-weight: bold;
-  font-size: .9em;
-}
-
-tbody tr {
-  border-bottom: 1px solid #ddd;
-  font-size: .8em;
-}
-
-tbody tr:nth-of-type(even) {
-  background-color: #f9f9f9;
-}
-
-tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-@media (max-width: 768px) {
-  table, thead, tbody, th, td, tr {
-    display: block;
-  }
-
-  thead tr {
-    display: none;
-  }
-
-  tr {
-    margin-bottom: 15px;
-  }
-
-  td {
-    padding: 10px;
-    text-align: right;
-    position: relative;
-  }
-
-  td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 0;
-    width: 50%;
-    padding-left: 15px;
-    font-weight: bold;
-    text-align: left;
-  }
-} */
-
-
 table, th, td{
-  padding: .7em;
+  border: 1px solid black;
+  border-radius: 2px;
 }
+
+.patientName{
+  width: 15%;
+  text-align: center;
+  font-size: 90%;
+}
+
+.depart{
+  width: 15%;
+  text-align: center;
+  font-size: 90%;
+}
+
+.doc{
+  width: 15%;
+  text-align: center;
+  font-size: 90%;
+}
+
+.sNumber{
+  width: 5%;
+  text-align: center;
+}
+
+.queueNo{
+  width: 5%;
+  text-align: center;
+}
+
+.opdId{
+  width: 5%;
+  text-align: center;
+}
+
+.UHID{
+  width: 5%;
+  text-align: center;
+  font-size: 80%  ;
+}
+
+.type{
+  width: 5%;
+  text-align: center;
+}
+
+.fee{
+  width: 5%;
+  text-align: center;
+}
+
+.paymentMethod{
+  width: 5%;
+  text-align: center;
+}
+
+.process{
+  width: 5%;
+  text-align: center; 
+}
+/* <th className='sNumber'>S No.</th>
+<th className='queueNo'>Queue</th>
+<th className='opdId'>OPD ID</th>
+<th className='UHID'>UHID</th>
+<th className='patientName'>Patient Name</th>
+<th className='depart'>Department</th>
+<th className='doc'>Doctor</th>
+<th className='type'>Type</th>
+<th className='fee'>Fee</th>
+<th className='paymentMethod'>Mode</th>
+<th className='process'>Process</th> */
