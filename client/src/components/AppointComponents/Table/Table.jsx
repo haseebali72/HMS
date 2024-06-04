@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import "./Table.css"
-import { tableInfo } from '../../../data/appointmentTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCircleXmark, faPrint } from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from 'react-redux'
 
 const Table = () => {
+    const data = useSelector(state => state.appointmentFormData)
+    console.log(data)
+    const tableInfo = [];
+    tableInfo.push(data)
     const onRefundIssue = ()=>{
         alert("refund issued")
     }
@@ -32,19 +36,19 @@ const Table = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {tableInfo.map((info) => (
-                        <tr key={info.s_number}>
-                            <td className='sNumber'>{info.s_number}</td>
-                            <td className='queueNo'>{info.queueNo}<button onClick={onRefundIssue}><FontAwesomeIcon icon={faCircleXmark}/></button></td>
-                            <td className='opdId'>{info.opdId}<button onClick={appointmentSlipGenerator}><FontAwesomeIcon icon={faPrint}/></button></td>
-                            <td className='UHID'>{info.UHID}</td>
-                            <td className='patientName'>{info.patient_name}</td>
-                            <td className='depart'>{info.Department}</td>
-                            <td className='doc'>{info.Doctor}</td>
-                            <td className='type'>{info.Type}</td>
-                            <td className='fee'>{info.Fee}</td>
-                            <td className='paymentMethod'>{info.payment_mode}</td>
-                            <td className='process'>{info.Process}</td>
+                    {tableInfo.map((obj, index) => (
+                        <tr key={index}>
+                            <td className='sNumber'>{obj?.s_number}</td>
+                            <td className='queueNo'>{obj?.queueNo}<button onClick={onRefundIssue}><FontAwesomeIcon icon={faCircleXmark}/></button></td>
+                            <td className='opdId'>{obj?.opdId}<button onClick={appointmentSlipGenerator}><FontAwesomeIcon icon={faPrint}/></button></td>
+                            <td className='UHID'>{obj?.UHID}</td>
+                            <td className='patientName'>{obj?.name}</td>
+                            <td className='depart'>{obj?.department}</td>
+                            <td className='doc'>{obj?.doctor}</td>
+                            <td className='type'>{obj?.Type}</td>
+                            <td className='fee'>{obj?.Fee}</td>
+                            <td className='paymentMethod'>{obj?.payment_mode}</td>
+                            <td className='process'>{obj?.Process}</td>
                         </tr>
                     ))}
                 </tbody>

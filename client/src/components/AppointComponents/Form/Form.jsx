@@ -1,7 +1,6 @@
     import React, { useRef , useState, useEffect} from 'react'
     import { useForm,} from "react-hook-form"
     import { DevTool } from "@hookform/devtools"
-    import "./form.css"
     import { opdDoctors } from '../../../data/Doctors'
     import { useDispatch } from 'react-redux'
     import { addData } from '../../../redux/slices/appointmentData.slice'
@@ -9,8 +8,11 @@
     import PrintSlip from '../../AppointmentPrintSlip/PrintSlip'
     import Loader from '../../Loading/Loader'
     import { calculateAge } from '../../../utilities/ageCalculator'
+    import "./form.css"
+
 
     const Form = () => {
+
         const [loading, setLoading] = useState(false)
         const componentRef = useRef();
         const handlePrint = useReactToPrint({
@@ -18,22 +20,24 @@
         });
 
         const dispatch = useDispatch();
-        const { register, handleSubmit, formState, control, setValue, watch } = useForm({
+        const { register, handleSubmit, formState, control, setValue, watch, reset} = useForm({
             defaultValues: {
                 date: new Date().toLocaleDateString("en-GB"),
                 time: new Date().toLocaleTimeString(),
-                age : "",
-            }
+                }
         });
+        const { errors, isDirty } = formState;
 
+        // Watch Values
         const watchDOB = watch('date_of_birth')
-        const { errors } = formState;
+        const payment_method = watch("payment_method")
+       
+        console.log(payment_method)
 
         const timeRef = useRef(new Date());
         const [, setTick] = useState(0);
 
         // Effects
-
         useEffect(() => {
             const interval = setInterval(() => {
                 timeRef.current = new Date();
@@ -48,22 +52,25 @@
             return () => clearInterval(interval);
         }, [setValue]);
 
+
         useEffect(()=>{
             if(watchDOB){
                 const age = calculateAge(watchDOB)
-                const ageWithYears = `${age} Years`
-                setValue('age', ageWithYears)
+                setValue('age', age)
             }
         }, [watchDOB, setValue])
 
+
+        // Form Submit Handler
         const onSubmit = data => {
             setLoading(true)
             dispatch(addData(data));
             alert("Data submitted");
             handlePrint();
+            reset()
         };
 
-
+        // Checking for render
         console.log("Haseeb")
         return (
             <>
@@ -79,6 +86,7 @@
                         <label htmlFor='dob'>Date of Birth:</label>
                         <label htmlFor='age'>Age:</label>
                         <label htmlFor='email'>Email:</label>
+                        <label htmlFor='fee'>Fee : </label>
                     </div>
 
                     <div className='fieldsdivOne'>
@@ -227,7 +235,7 @@
                                 id='dob'
                                 {...register("date_of_birth", {
                                     required: "Date of Birth Required",
-                                    validate: value => value !== "" || "DOB Required"
+                                    validate: value => value !== "" || "DOB Required",
                                 })}
                             />
                             <p className={errors.date_of_birth ? "error" : "hidden"}>
@@ -239,12 +247,18 @@
 
                         <div>
                             <input
-                                type="text"
-                                className="fields"
+                                placeholder="Patient's Age"
+                                type="number"
+                                className="fields age"
                                 id='dob'
                                 readOnly
-                                {...register("age")}
+                                {...register("age",{
+                                    valueAsNumber : true
+                                }
+
+                                )}
                             />
+                            <span>Years</span>
                         </div>
                     
                         {/* Email */}
@@ -266,6 +280,17 @@
                                 {errors.email?.message}
                             </p>
                         </div>
+
+                        {/* Fee */}
+                        <div>
+                            <input
+                                placeholder="Fee"
+                                type="number"
+                                className="fields"
+                                id='fee'
+                                {...register("fee")}
+                            />
+                        </div>
                     </div>
 
                     <div className='labelsdivTwo'>
@@ -278,6 +303,13 @@
                         <label htmlFor='city'>City:</label>
                         <label htmlFor='panel'>Panel: </label>
                         <label htmlFor='payment'>Payment:</label>
+                        {payment_method == "Online" && (
+                        <>
+                            <label htmlFor='transaction_id'>Transaction ID:</label>
+                            <label className='bank'>Bank or Wallet:</label>
+                        </>            
+                        )}
+             
                     </div>
 
                     <div className='fieldsdivTwo'>
@@ -313,6 +345,7 @@
                         {/* Made By */}
                         <div>
                             <input
+                                placeholder='Software User'
                                 id='user'
                                 type="text"
                                 className="fields"
@@ -434,7 +467,7 @@
                                 id="payment"
                                 className='fields'
                                 defaultValue="NA"
-                                {...register("payment", {
+                                {...register("payment_method", {
                                     required: "Payment Method Required",
                                     validate: value => value !== "NA" || "Payment Method Required"
                                 })}
@@ -443,19 +476,46 @@
                                 <option value="Online">Online</option>
                                 <option value="Cash">Cash</option>
                             </select>
-                            <p className={errors.payment ? "error" : "hidden"}>
-                                {errors.payment?.message}
+                            <p className={errors.payment_method ? "error" : "hidden"}>
+                                {errors.payment_method?.message}
                             </p>
                         </div>
 
+                        {/* Transaction Id*/}
+                        {payment_method == "Online" && (
+                            <div>
+                            <input 
+                              id='transaction_id' 
+                              className='fields' 
+                              {...register('transactionId',{
+                                required  :{
+                                    value : true,
+                                    message : "Transaction ID Required"
+                                }
+
+                            })} />
+                          </div>
+                        )}
+
+                        {/* Bank or WAllet */}
+                        {payment_method == "Online" && (
+                           <div>
+                              <input 
+                               className='fields' 
+                               id='bank'
+                               {...register('particular_bank')}
+                              />
+                            </div>
+
+                        )}
+
                         {/* Submit */}
                         <div className='submitButton'>
-                            <input type='submit' value="Submit" />
+                            <input type='submit' value="Submit" disabled={isDirty? true : false}/> 
                         </div>
                     </div>
                 </form>
 
-                {loading ? <Loader/> : null}                
                 <div style={{ display: 'none' }}>
                     <PrintSlip ref={componentRef} />
                 </div>
