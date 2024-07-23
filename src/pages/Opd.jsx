@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
+
 const Opd = () => {
     const entries = [
-        {
+        {   
+            key : 1,
             serial: 1,
             queue: 1,
             opdId: "OP-6",
@@ -15,7 +17,7 @@ const Opd = () => {
             type: "Gen",
             fee: "500 Rs",
             mode: "Cash",
-            process: <><button><FontAwesomeIcon icon={faSheetPlastic} /></button></> 
+            process: <><button><FontAwesomeIcon icon={faSheetPlastic} /></button></>
         }
     ]
     const opdDoctors = [
@@ -30,10 +32,12 @@ const Opd = () => {
     const { register, handleSubmit, control, watch, formState: { errors } } = form
     const payment_method = watch("payment_method")
 
-    const formsubmit = data =>{
+
+    const formsubmit = async data => {
         console.log(data)
     }
     return (
+
         <>
             <div className='m-2'>
 
@@ -344,7 +348,6 @@ const Opd = () => {
                                 placeholder='Software User'
                                 id='user'
                                 type="text"
-                                readOnly
                                 className='m-1 rounded-sm border-[.1rem] transition-all ease-in-out border-gray-200'
                                 {...register("created_by", {
                                     required: "User Required"
@@ -523,34 +526,39 @@ const Opd = () => {
 
                     <div className='m-1'>
                         <table className='table w-full'>
-                            <tr className='text-center'>
-                                <th>S.No</th>
-                                <th>Queue</th>
-                                <th>OPD ID</th>
-                                <th>Patient Name</th>
-                                <th>Department</th>
-                                <th>Doctor</th>
-                                <th>Type</th>
-                                <th>Fee</th>
-                                <th>Mode</th>
-                                <th>Process</th>
-                            </tr>
-                            <tr className='text-center'>
-                                {entries.map(entry => (
-                                    <>
-                                        <td >{entry.serial}</td>
-                                        <td>{entry.queue}</td>
-                                        <td>{entry.opdId}</td>
-                                        <td>{entry.patient_name}</td>
-                                        <td>{entry.depart}</td>
-                                        <td>{entry.doc}</td>
-                                        <td>{entry.type}</td>
-                                        <td>{entry.fee}</td>
-                                        <td>{entry.mode}</td>
-                                        <td>{entry.process}</td>
-                                    </>
-                                ))}
-                            </tr>
+                            <thead>
+                                <tr className='text-center'>
+                                    <th>S.No</th>
+                                    <th>Queue</th>
+                                    <th>OPD ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Department</th>
+                                    <th>Doctor</th>
+                                    <th>Type</th>
+                                    <th>Fee</th>
+                                    <th>Mode</th>
+                                    <th>Process</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className='text-center'>
+                                    {entries.map(entry => (
+                                        <>
+                                            <td >{entry.serial}</td>
+                                            <td>{entry.queue}</td>
+                                            <td>{entry.opdId}</td>
+                                            <td>{entry.patient_name}</td>
+                                            <td>{entry.depart}</td>
+                                            <td>{entry.doc}</td>
+                                            <td>{entry.type}</td>
+                                            <td>{entry.fee}</td>
+                                            <td>{entry.mode}</td>
+                                            <td>{entry.process}</td>
+                                        </>
+                                    ))}
+                                </tr>
+                            </tbody>
+
                         </table>
 
                     </div>
