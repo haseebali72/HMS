@@ -1,6 +1,9 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-import logo from "../assets/logo.png"
+import { NavLink, useNavigate } from 'react-router-dom'
+import { auth } from '../firebase/firebase'
+import { toast } from 'react-toastify'
+
+
 const Header = () => {
     const services = [
         { name: "OPD", path: "/dashboard/opd", key: 1 },
@@ -13,6 +16,13 @@ const Header = () => {
         { name: "Certificate", path: "/dashboard/cert", key: 8 },
         { name: "MIS", path: "/dashboard/opd", key: 9 },
     ]
+
+    const navigate = useNavigate()
+    const handleLogout =async ()=>{
+        await auth.signOut()
+        navigate("/sign-in")
+        toast.success("Successfully signed out")
+    }
     return (
         <>
             <header className='flex justify-between items-center px-3 w-full bg-[#017f82] shadow-xl top-0 sticky z-50 h-14 text-white'>
@@ -25,7 +35,7 @@ const Header = () => {
                     </ul>
                 </nav>
                 <div>
-                    <button>Logout</button>
+                    <button  onClick={handleLogout}>Logout</button>
                 </div>
             </header>
         </>
