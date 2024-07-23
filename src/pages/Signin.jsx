@@ -1,28 +1,61 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Logo from "../assets/logo.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faKey, faStaffSnake, faUser } from '@fortawesome/free-solid-svg-icons'
+import { signin } from '../firebase/auth.firebase'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { RotatingLinesfull } from '../components/Loaders'
+import { auth } from '../firebase/firebase'
 
 
 const Signin = () => {
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+
     const categories = [
         { value: "admin", name: "Administrator", key: 1 },
         { value: "doctor", name: "Doctor", key: 2 },
         { value: "accountant", name: "Accountant", key: 3 },
         { value: "paramedical", name: "Para-Medical", key: 4 },
-        { value: "admin", name: "Administrator", key: 5 },
-        { value: "admin", name: "Administrator", key: 6 },
     ]
 
     const form = useForm()
     const { register, handleSubmit, control } = form
 
-    const formsubmit = data => {
+    console.log(auth.currentUser)
+    const formsubmit = async data => {
+        setLoading(true)
         console.log(data)
+        const response = await signin(data)
+        if (response.signinSuccess) {
+            toast.success("Signed in")
+            navigate("/dashboard/opd")
+            setLoading(false)   
+            console.log(auth.currentUser)
+        }
+        if(response.categoryMismatched){
+            toast.error(response.categoryMismatched)
+            setLoading(false)
+        }
+        if(response.invalidCredentialsMessage){
+            toast.error(response.invalidCredentialsMessage)
+            setLoading(false)
+        }
+        if(response.ErrorinCatch){
+            toast.error(response.ErrorinCatch)
+            setLoading(false)
+        }
+        if(response.noUserName){
+            toast.error(response.noUserName)
+            setLoading(false)
+        }
+        
     }
 
     return (
+        loading ? <RotatingLinesfull/> : 
         <>
             <div className=' h-screen flex flex-col justify-center items-center'>
                 <div className='bg-slate-200 rounded-md shadow-2xl'>
@@ -34,7 +67,7 @@ const Signin = () => {
                             <label htmlFor='category' className='bg-blue-600 px-2 rounded-full text-xl'>
                                 <FontAwesomeIcon className='' icon={faStaffSnake} />
                             </label>
-                            <select id='cateogry' className='rounded'>
+                            <select id='cateogry' className='rounded' {...register("category", { required: true })}>
                                 {categories.map(category => (<option key={category.key} value={category.value}>{category.name}</option>))}
                             </select>
                         </div>
@@ -51,7 +84,7 @@ const Signin = () => {
                                 })} />
                             </div>
                             <div>
-                                <label htmlFor='category' className=''>
+                                <label htmlFor='password' className=''>
                                     <FontAwesomeIcon icon={faKey} />
                                 </label>
                                 <input type='password' className='mx-1 mt-1 p-1 rounded ' placeholder='Enter Password' {...register('pwd', {
