@@ -6,14 +6,13 @@ import { faKey, faStaffSnake, faUser } from '@fortawesome/free-solid-svg-icons'
 import { signin } from '../firebase/auth.firebase'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { RotatingLinesfull } from '../components/Loaders'
 import { auth } from '../firebase/firebase'
+import { RotatingLinesfull } from '../components/Loaders'
 
 
 const Signin = () => {
-    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-
+    const [loading, setLoading] = useState(false)
     const categories = [
         { value: "admin", name: "Administrator", key: 1 },
         { value: "doctor", name: "Doctor", key: 2 },
@@ -27,29 +26,29 @@ const Signin = () => {
     console.log(auth.currentUser)
     const formsubmit = async data => {
         setLoading(true)
-        console.log(data)
+        // console.log(data)
         const response = await signin(data)
         if (response.signinSuccess) {
+            setLoading(false)
             toast.success("Signed in")
             navigate("/dashboard/opd")
-            setLoading(false)   
             console.log(auth.currentUser)
         }
         if(response.categoryMismatched){
-            toast.error(response.categoryMismatched)
             setLoading(false)
+            toast.error(response.categoryMismatched)
         }
         if(response.invalidCredentialsMessage){
-            toast.error(response.invalidCredentialsMessage)
             setLoading(false)
+            toast.error(response.invalidCredentialsMessage)
         }
         if(response.ErrorinCatch){
-            toast.error(response.ErrorinCatch)
             setLoading(false)
+            toast.error(response.ErrorinCatch)
         }
         if(response.noUserName){
-            toast.error(response.noUserName)
             setLoading(false)
+            toast.error(response.noUserName)
         }
         
     }
@@ -57,6 +56,7 @@ const Signin = () => {
     return (
         loading ? <RotatingLinesfull/> : 
         <>
+
             <div className=' h-screen flex flex-col justify-center items-center'>
                 <div className='bg-slate-200 rounded-md shadow-2xl'>
                     <div className='flex justify-center items-center bg-slate-100 m-1'>
