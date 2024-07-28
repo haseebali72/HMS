@@ -6,17 +6,23 @@ import { onAuthStateChanged } from 'firebase/auth'
 
 const PrivateRoute = () => {
   const [loggedIn, setLoggedIn] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-   onAuthStateChanged(auth, user=>{
-    if(user){
-      setLoggedIn(true)
-      navigate("/dashboard")
-    }
-   })
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        setLoggedIn(true)
+      }
+      setLoading(false)
+    })
   }, [])
 
-  return loggedIn ? <><Header/><Outlet /></>  : <Navigate to="/sign-in" />
+  if (loading) {
+    return <h1>Loading.....</h1>
+  }
+
+
+  return loggedIn ? <><Header /><Outlet /></> : <Navigate to="/sign-in" />
 }
 
 export default PrivateRoute
