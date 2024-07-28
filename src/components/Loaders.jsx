@@ -1,29 +1,39 @@
 import React from 'react'
-import { RotatingLines } from 'react-loader-spinner'
+import { DNA, RotatingLines } from 'react-loader-spinner'
 
 const RotatingLinesfull = () => {
     return (
         <>
-            <div className='bg-black bg-opacity-50 flex items-center justify-center fixed left-0 right-0 bottom-0 top-0'>
-                <div>
-                    <RotatingLines
-                        visible={true}
-                        height="96"
-                        width="96"
-                        color="red"
-                        strokeWidth="5"
-                        animationDuration="0.75"
-                        ariaLabel="rotating-lines-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                    />
-                </div>
-
+            <div className='flex h-screen justify-center items-center bg-slate-500 opacity-50'>
+                <RotatingLines
+                    visible={true}
+                    color="red"
+                    strokeWidth="3"
+                    strokeColor='#017f82'
+                    animationDuration="0.75"
+                    ariaLabel="rotating-lines-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                />
             </div>
 
         </>
     )
 }
 
-
-export {RotatingLinesfull}
+const DNALoading = () => {
+    return(
+        <>
+            <DNA
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+            />
+        </>
+    )
+}
+export { RotatingLinesfull }
+export { DNALoading }
