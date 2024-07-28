@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Signin from './pages/Signin'
 import PrivateRoute from './components/PrivateRoute'
 import Opd from './pages/Opd'
+import Queue from './pages/Queue'
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
         <Route path='/dashboard' element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Opd/>}/> 
           <Route path='/dashboard/opd' element={<Opd/>}/>
-          <Route path='/dashboard/queue' element={<h1>Queue</h1>}/>
+          <Route path='/dashboard/queue' element={<Queue/>}/>
           <Route path='/dashboard/investigation' element={<h1>invest</h1>}/>
           <Route path='/dashboard/day-care' element={<h1>day care</h1>}/>
           <Route path='/dashboard/birth-reg' element={<h1>Birth-reg</h1>}/>
