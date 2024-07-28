@@ -1,25 +1,31 @@
 import { faSearch, faSheetPlastic } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { registrationTable } from '../store/slices/registrationTable.slice'
+import { useReactToPrint } from 'react-to-print'
+import OPDPaymentReciept from '../printComponents/OPDPaymentReciept'
 
 
 const Opd = () => {
-    const entries = [
-        {   
-            key : 1,
-            serial: 1,
-            queue: 1,
-            opdId: "OP-6",
-            patient_name: "Haseeb Ali",
-            depart: "Skin Specialist",
-            doc: "Shmaila Taqi",
-            type: "Gen",
-            fee: "500 Rs",
-            mode: "Cash",
-            process: <><button><FontAwesomeIcon icon={faSheetPlastic} /></button></>
-        }
-    ]
+    const [patientData, setPatientData] = useState(null)
+    const registeredPatients = useSelector(state => state.table)
+    const dispatch = useDispatch()
+
+    // Button Text State
+    const [submitBtnText , setSubmitBtnName] = useState("Register")
+    // console.log(registeredPatients)
+
+    const printRecieptRef = useRef()
+
+    const handlePrint = useReactToPrint({
+        content : ()=>printRecieptRef.current,
+        onAfterPrint: () => setSubmitBtnName("Register"),
+        onPrintError : ()=> alert("Error Printing. Contact Administrator "),
+        suppressErrors : true
+    })
+
     const opdDoctors = [
         { key: 0, name: "Dr Ismail Habib", value: "Dr Ismail Habib" },
         { key: 1, name: "Dr Isra Shehbaz", value: "Dr Isra Shehbaz" },
@@ -28,14 +34,58 @@ const Opd = () => {
         { key: 4, name: "Dr Azhar Javed", value: "Dr Azhar Javed" },
         { key: 6, name: "Dr Kaleem Khan", value: "Dr Kaleem Khan" },
     ]
-    const form = useForm()
-    const { register, handleSubmit, control, watch, formState: { errors } } = form
+
+    const form = useForm({
+        defaultValues: {
+            payment_method: "NA"
+        }
+    });
+    const { register, handleSubmit, control, watch, formState: { errors }, reset } = form
     const payment_method = watch("payment_method")
 
-
     const formsubmit = async data => {
+        setSubmitBtnName("Processing...")
+        setPatientData(data)
         console.log(data)
+        const newKey = registeredPatients.length > 0 ? registeredPatients[registeredPatients.length - 1].key + 1 : 1;
+        const newSerial = registeredPatients.length > 0 ? registeredPatients[registeredPatients.length - 1].serial + 1 : 1;
+        const newQueue = registeredPatients.length > 0 ? registeredPatients[registeredPatients.length - 1].queue + 1 : 1;
+
+        const tableNewEntry = {
+            key: newKey,
+            serial: newSerial,
+            queue: newQueue,
+            opdId: `OPD-${newSerial}`, // Example generation of OPD ID
+            patient_name: data.name,
+            depart: data.department,
+            doc: data.doctor,
+            type: "Gen",
+            fee: data.fee,
+            mode: data.payment_method,
+        }
+        dispatch(registrationTable(tableNewEntry))
+        handlePrint()
+        // reset()
     }
+
+    // USE EFFECTS
+    useEffect(() => {
+        try {
+            const savedPatients = JSON.parse(localStorage.getItem('registration_table'));
+            if (savedPatients) {
+                savedPatients.forEach(patient => dispatch(registerPatient(patient)));
+            }
+        } catch (error) {
+            console.error("Failed to load patients from localStorage:", error);
+        }
+    }, [])
+
+    useEffect(() => {
+        localStorage.setItem("registration_table", JSON.stringify(registeredPatients))
+    }, [registeredPatients])
+
+    
+
     return (
 
         <>
@@ -511,7 +561,7 @@ const Opd = () => {
 
                         {/* Submit */}
                         <div className='submitButton'>
-                            <input type='submit' value="Register" className='m-1 px-2 py-1 rounded shadow-xl cursor-pointer hover:bg-blue-700 tranistion-all duration-200 ease-in-out bg-blue-500 text-white font-thin' />
+                            <input type='submit' value={submitBtnText} className='m-1 px-2 py-1 rounded shadow-xl cursor-pointer hover:bg-blue-700 tranistion-all duration-200 ease-in-out bg-blue-500 text-white font-thin' />
                         </div>
                     </div>
                 </form>
@@ -537,26 +587,24 @@ const Opd = () => {
                                     <th>Type</th>
                                     <th>Fee</th>
                                     <th>Mode</th>
-                                    <th>Process</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className='text-center'>
-                                    {entries.map(entry => (
-                                        <>
-                                            <td >{entry.serial}</td>
-                                            <td>{entry.queue}</td>
-                                            <td>{entry.opdId}</td>
-                                            <td>{entry.patient_name}</td>
-                                            <td>{entry.depart}</td>
-                                            <td>{entry.doc}</td>
-                                            <td>{entry.type}</td>
-                                            <td>{entry.fee}</td>
-                                            <td>{entry.mode}</td>
-                                            <td>{entry.process}</td>
-                                        </>
-                                    ))}
-                                </tr>
+                                {registeredPatients.map(entry => (
+                                    <tr key={entry.key} className='text-center'>
+                                        <td>{entry.serial}</td>
+                                        <td>{entry.queue}</td>
+                                        <td>{entry.opdId}</td>
+                                        <td>{entry.patient_name}</td>
+                                        <td>{entry.depart}</td>
+                                        <td>{entry.doc}</td>
+                                        <td>{entry.type}</td>
+                                        <td>{entry.fee}</td>
+                                        <td>{entry.mode}</td>
+                                        <td><button><FontAwesomeIcon icon={faSheetPlastic} /></button></td>
+                                    </tr>
+                                ))}
                             </tbody>
 
                         </table>
@@ -564,6 +612,13 @@ const Opd = () => {
                     </div>
 
                 </div>
+
+                {/* Print Reciept */}
+                <div className='hidden'>
+                <OPDPaymentReciept data={patientData} ref={printRecieptRef}/>
+
+                </div>
+                
             </div>
         </>
     )
