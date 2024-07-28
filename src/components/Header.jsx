@@ -20,6 +20,7 @@ const Header = () => {
     const navigate = useNavigate()
     const handleLogout =async ()=>{
         await auth.signOut()
+        localStorage.removeItem("registration_table")
         navigate("/sign-in")
         toast.success("Successfully signed out")
     }
